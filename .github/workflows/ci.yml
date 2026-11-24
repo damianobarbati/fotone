@@ -42,6 +42,7 @@ jobs:
             throw new Error(`Expected tag ${expectedTag} for Fotone`);
           }
           NODE
+          node pack.ts --sync-version
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -86,8 +87,14 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+
       - name: Build Apple Silicon binary
         run: |
+          node pack.ts --sync-version
           cargo build --locked --release --manifest-path packages/fotone-rust/Cargo.toml
           packages/fotone-rust/target/release/fotone-rust --version
 
@@ -107,8 +114,14 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+
       - name: Build Linux x64 binary
         run: |
+          node pack.ts --sync-version
           target_dir="$PWD/packages/fotone-rust/target/x86_64-unknown-linux-musl"
           mkdir -p "$target_dir"
           docker run --rm --platform linux/amd64 \

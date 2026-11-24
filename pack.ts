@@ -1,12 +1,7 @@
-import { execFile } from 'node:child_process';
 import { chmod, copyFile, mkdir, mkdtemp, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { promisify } from 'node:util';
 import manifest from './package.json' with { type: 'json' };
 
-type CargoMetadata = { packages: { version: string }[] };
-
-const exec = promisify(execFile);
 const { version } = manifest;
 const root = import.meta.dirname;
 const rustRoot = join(root, 'packages/fotone-rust');
@@ -30,22 +25,35 @@ const packageManifest = {
   files: ['cli.js', 'bin/'],
 };
 
-const checkVersion = async () => {
-  const { stdout } = await exec('cargo', ['metadata', '--locked', '--no-deps', '--format-version', '1'], {
-    cwd: rustRoot,
-  });
+const syncCargoVersion = async () => {
+  const files = [
+    { name: 'Cargo.toml', pattern: /^(?<prefix>\[package\]\r?\nname = "fotone-rust"\r?\nversion = ")[^"\r\n]+"$/m },
+    { name: 'Cargo.lock', pattern: /^(?<prefix>\[\[package\]\]\r?\nname = "fotone-rust"\r?\nversion = ")[^"\r\n]+"$/m },
+  ];
 
-  const { packages } = JSON.parse(stdout) as CargoMetadata;
-  const [{ version: rustVersion }] = packages;
+  const updates: { path: string; updated: string }[] = [];
 
-  if (rustVersion !== version) {
-    throw new Error(`Expected Fotone version ${version}. Cargo uses ${rustVersion}.`);
+  for (const { name, pattern } of files) {
+    const path = join(rustRoot, name);
+    const content = await readFile(path, 'utf8');
+
+    if (!pattern.test(content)) {
+      throw new Error(`Cannot find the fotone-rust version in ${name}.`);
+    }
+
+    const updated = content.replace(pattern, `$<prefix>${version}"`);
+
+    if (updated !== content) {
+      updates.push({ path, updated });
+    }
+  }
+
+  for (const { path, updated } of updates) {
+    await writeFile(path, updated);
   }
 };
 
 const pack = async () => {
-  await checkVersion();
-
   const sourceReadme = await readFile(join(root, 'README.md'), 'utf8');
   const [intro] = sourceReadme.split(/^## Development[ \t]*\r?$/m, 1);
   const dist = join(root, 'dist');
@@ -82,4 +90,8 @@ const pack = async () => {
   }
 };
 
-await pack();
+await syncCargoVersion();
+
+if (process.argv[2] !== '--sync-version') {
+  await pack();
+}
