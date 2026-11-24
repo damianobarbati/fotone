@@ -5,6 +5,8 @@ One command. All the power.
 
 **Fotone** is built in Rust and runs on Linux x64 and Apple Silicon.
 
+[Documentation and benchmarks here.](https://damianobarbati.github.io/fotone/)
+
 ## Usage
 
 ```sh
