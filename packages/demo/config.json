@@ -1,0 +1,5 @@
+{
+  "headers": [{ "paths": ["/**"], "X-Demo": "JSON" }],
+  "rewrites": [{ "source": "/hello", "destination": "/hello.html" }],
+  "redirects": [{ "source": "/old", "destination": "/hello" }]
+}

@@ -1,0 +1,96 @@
+@import "nano-ux/tailwind.css";
+@source "./components";
+
+@custom-variant max-tablet (@media (width <= 800px));
+@custom-variant max-phone (@media (width <= 520px));
+
+@font-face {
+  font-family: "Science Gothic";
+  src: url("@fontsource-variable/science-gothic/files/science-gothic-latin-wght-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  unicode-range: U+46, U+65-66, U+6E-6F, U+74;
+}
+
+@theme {
+  --color-divider: #2b373d;
+  --font-brand: "Science Gothic", system-ui, sans-serif;
+}
+
+:root.dark {
+  --color-brand: var(--color-mintlight);
+}
+
+@layer base {
+  body {
+    @apply min-w-0 transition-none;
+  }
+}
+
+@layer components {
+  .site-link,
+  .site-action {
+    @apply hover:text-mintlight focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-focus;
+  }
+
+  .site-action {
+    @apply inline-flex items-center gap-2;
+  }
+
+  .doc-section {
+    @apply grid scroll-mt-5 gap-5 border-t border-divider py-14 max-phone:py-11;
+  }
+
+  .doc-section-split {
+    @apply grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] gap-[clamp(1.25rem,4vw,3rem)] max-tablet:grid-cols-1;
+  }
+
+  .doc-section > * {
+    @apply min-w-0;
+  }
+
+  .doc-section h2 {
+    @apply mb-[0.7rem] text-[clamp(1.7rem,4vw,2.55rem)] font-[730] leading-[1.2] tracking-[-0.045em];
+  }
+
+  .doc-section p {
+    @apply mb-[1.15rem] max-w-[36ch] leading-[1.65];
+  }
+
+  .section-copy p {
+    @apply max-w-[64ch] last:mb-0;
+  }
+
+  .feature-grid h3,
+  .capabilities h2 {
+    @apply mb-[0.55rem] text-[1.15rem] font-bold;
+  }
+
+  .feature-grid p,
+  .capabilities p {
+    @apply m-0 max-w-none leading-[1.65];
+  }
+}
+
+@utility text-glow-brand {
+  text-shadow:
+    0 0 0.4em color-mix(in srgb, currentColor 42%, transparent),
+    0 0 0.9em color-mix(in srgb, currentColor 24%, transparent);
+}
+
+@utility benchmark-choices {
+  @apply m-0 flex min-w-0 rounded-lg border border-divider p-0.5;
+}
+
+@utility benchmark-choice {
+  @apply inline-flex min-h-9 cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-2.5 text-sm font-medium text-fg select-none hover:bg-mint/10;
+
+  &:has(input:checked) {
+    @apply bg-mint/20 text-mintlight;
+  }
+
+  &:has(input:focus-visible) {
+    @apply outline-2 outline-offset-[-2px] outline-focus;
+  }
+}

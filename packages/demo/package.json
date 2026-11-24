@@ -1,0 +1,9 @@
+{
+  "name": "demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node ../fotone-node/src/index.ts public --port 9001 --spa --rewrite /hello=/hello.html --redirect /old=/hello=302 -H 'X-Demo: CLI'",
+    "dev:config": "node ../fotone-node/src/index.ts public --port 9001 --spa --config config.json"
+  }
+}

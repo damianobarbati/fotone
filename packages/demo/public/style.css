@@ -1,0 +1,16 @@
+:root {
+  color-scheme: dark;
+  font:
+    1rem / 1.65 system-ui,
+    sans-serif;
+  background: #101418;
+  color: #f2f6f6;
+}
+main {
+  max-width: 37rem;
+  margin: 4rem auto;
+  padding-inline: 1.25rem;
+}
+a {
+  color: #8bf3c5;
+}

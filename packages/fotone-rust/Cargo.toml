@@ -1,0 +1,42 @@
+[package]
+name = "fotone-rust"
+version = "0.0.1"
+edition = "2024"
+publish = false
+
+[dependencies]
+base64 = "0.22"
+bcrypt = "0.19"
+bytes = "1"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+dotenvy = "0.15"
+futures-util = { version = "0.3", default-features = false }
+globset = "0.4"
+http-body-util = "0.1"
+httpdate = "1"
+hyper = { version = "1", features = ["server", "http1", "http2"] }
+hyper-util = { version = "0.1", features = ["server-auto", "tokio"] }
+ipnet = "2"
+percent-encoding = "2"
+regex = "1"
+rustix = { version = "1", features = ["fs"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+sha2 = "0.10"
+subtle = "2"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "io-util", "fs", "signal", "sync", "time"] }
+tokio-util = { version = "0.7", features = ["io"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+unused_must_use = "deny"
+
+[lints.clippy]
+unwrap_used = "deny"
+panic = "deny"
+dbg_macro = "deny"
+todo = "warn"
+
+[profile.release]
+lto = "thin"
+strip = true

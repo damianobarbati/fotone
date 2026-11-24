@@ -1,0 +1,212 @@
+{
+  "metadata": {
+    "startedAt": "2026-11-24T23:01:41.707Z",
+    "cpu": "Apple M3",
+    "httpVersion": "HTTP/1.1",
+    "concurrency": 100,
+    "pipelining": 10,
+    "duration": 5
+  },
+  "servers": [
+    {
+      "id": "fotone-rust",
+      "label": "Fotone Rust"
+    },
+    {
+      "id": "fotone",
+      "label": "Fotone Node"
+    },
+    {
+      "id": "express",
+      "label": "Express"
+    },
+    {
+      "id": "fastify",
+      "label": "Fastify"
+    },
+    {
+      "id": "hono",
+      "label": "Hono"
+    }
+  ],
+  "workloads": [
+    {
+      "id": "small",
+      "label": "4 KiB static file"
+    },
+    {
+      "id": "large",
+      "label": "1 MiB static file"
+    },
+    {
+      "id": "brotli",
+      "label": "Brotli variant"
+    },
+    {
+      "id": "revalidation",
+      "label": "304 revalidation"
+    }
+  ],
+  "results": [
+    {
+      "serverId": "fotone-rust",
+      "workloadId": "small",
+      "requestsPerSecond": 78645.70858283434,
+      "p95Ms": 24,
+      "idleRssMiB": 6.7,
+      "peakRssMiB": 22.1
+    },
+    {
+      "serverId": "fotone-rust",
+      "workloadId": "large",
+      "requestsPerSecond": 1864.8076923076922,
+      "p95Ms": 621,
+      "idleRssMiB": 6.7,
+      "peakRssMiB": 67.1
+    },
+    {
+      "serverId": "fotone-rust",
+      "workloadId": "brotli",
+      "requestsPerSecond": 100625.79365079365,
+      "p95Ms": 19,
+      "idleRssMiB": 6.7,
+      "peakRssMiB": 16.7
+    },
+    {
+      "serverId": "fotone-rust",
+      "workloadId": "revalidation",
+      "requestsPerSecond": 97303.76984126984,
+      "p95Ms": 21,
+      "idleRssMiB": 6.7,
+      "peakRssMiB": 16.7
+    },
+    {
+      "serverId": "fotone",
+      "workloadId": "small",
+      "requestsPerSecond": 55668.4,
+      "p95Ms": 21,
+      "idleRssMiB": 81.1,
+      "peakRssMiB": 234.7
+    },
+    {
+      "serverId": "fotone",
+      "workloadId": "large",
+      "requestsPerSecond": 1489.0438247011953,
+      "p95Ms": 709,
+      "idleRssMiB": 81,
+      "peakRssMiB": 354.2
+    },
+    {
+      "serverId": "fotone",
+      "workloadId": "brotli",
+      "requestsPerSecond": 57629.6,
+      "p95Ms": 20,
+      "idleRssMiB": 81.2,
+      "peakRssMiB": 238.1
+    },
+    {
+      "serverId": "fotone",
+      "workloadId": "revalidation",
+      "requestsPerSecond": 63139.6,
+      "p95Ms": 19,
+      "idleRssMiB": 81.1,
+      "peakRssMiB": 221.3
+    },
+    {
+      "serverId": "express",
+      "workloadId": "small",
+      "requestsPerSecond": 30283,
+      "p95Ms": 37,
+      "idleRssMiB": 79.3,
+      "peakRssMiB": 214.9
+    },
+    {
+      "serverId": "express",
+      "workloadId": "large",
+      "requestsPerSecond": 1720.5936920222634,
+      "p95Ms": 745,
+      "idleRssMiB": 79.9,
+      "peakRssMiB": 349.6
+    },
+    {
+      "serverId": "express",
+      "workloadId": "brotli",
+      "requestsPerSecond": 30939.8,
+      "p95Ms": 37,
+      "idleRssMiB": 79.7,
+      "peakRssMiB": 255.2
+    },
+    {
+      "serverId": "express",
+      "workloadId": "revalidation",
+      "requestsPerSecond": 55413.17365269461,
+      "p95Ms": 29,
+      "idleRssMiB": 80,
+      "peakRssMiB": 157.3
+    },
+    {
+      "serverId": "fastify",
+      "workloadId": "small",
+      "requestsPerSecond": 24375.8,
+      "p95Ms": 48,
+      "idleRssMiB": 84.2,
+      "peakRssMiB": 246.8
+    },
+    {
+      "serverId": "fastify",
+      "workloadId": "large",
+      "requestsPerSecond": 1678.776290630975,
+      "p95Ms": 787,
+      "idleRssMiB": 84.5,
+      "peakRssMiB": 314.6
+    },
+    {
+      "serverId": "fastify",
+      "workloadId": "brotli",
+      "requestsPerSecond": 26581.237524950102,
+      "p95Ms": 43,
+      "idleRssMiB": 84.1,
+      "peakRssMiB": 251.1
+    },
+    {
+      "serverId": "fastify",
+      "workloadId": "revalidation",
+      "requestsPerSecond": 37954.69061876248,
+      "p95Ms": 30,
+      "idleRssMiB": 84.3,
+      "peakRssMiB": 163.6
+    },
+    {
+      "serverId": "hono",
+      "workloadId": "small",
+      "requestsPerSecond": 17453.09381237525,
+      "p95Ms": 68,
+      "idleRssMiB": 69.7,
+      "peakRssMiB": 253.5
+    },
+    {
+      "serverId": "hono",
+      "workloadId": "large",
+      "requestsPerSecond": 1386.083499005964,
+      "p95Ms": 722,
+      "idleRssMiB": 69.8,
+      "peakRssMiB": 379.6
+    },
+    {
+      "serverId": "hono",
+      "workloadId": "brotli",
+      "requestsPerSecond": 19183.6,
+      "p95Ms": 59,
+      "idleRssMiB": 69.8,
+      "peakRssMiB": 250.8
+    },
+    {
+      "serverId": "hono",
+      "workloadId": "revalidation",
+      "requestsPerSecond": 23650.299401197604,
+      "p95Ms": 61,
+      "idleRssMiB": 69.8,
+      "peakRssMiB": 279
+    }
+  ]
+}

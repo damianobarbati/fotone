@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.idea/
+.vscode/
+.DS_Store
+
+/.publish/
+/.reports/*
+!/.reports/.gitkeep
+/packages/fotone-rust/target/
