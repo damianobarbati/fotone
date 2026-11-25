@@ -3,7 +3,7 @@
 The fastest one-command static web server in the world. ⚡  
 One command. All the power.
 
-**Fotone** is built in Rust and runs on Linux x64 and Apple Silicon.
+**Fotone** is built in Rust and runs on Apple Silicon, Linux x64, and Linux ARM64.
 
 [Documentation and benchmarks here.](https://damianobarbati.github.io/fotone/)
 
@@ -73,9 +73,10 @@ pnpm -F website dev
 
 ## Release
 
-Run from the repository root on Apple Silicon with Rust and Docker installed. Keep the root version and the Rust crate version in sync, including `Cargo.lock`.
+Run from the repository root on Apple Silicon with Rust and Docker installed.
 
 ```sh
+node pack.ts --sync-version
 pnpm build
 
 mkdir -p packages/fotone-rust/target/x86_64-unknown-linux-musl
@@ -83,6 +84,14 @@ mkdir -p packages/fotone-rust/target/x86_64-unknown-linux-musl
 docker run --rm --platform linux/amd64 \
   --mount "type=bind,source=$PWD/packages/fotone-rust,target=/src,readonly" \
   --mount "type=bind,source=$PWD/packages/fotone-rust/target/x86_64-unknown-linux-musl,target=/out" \
+  --workdir /src rust:1.100.0-alpine3.24 \
+  cargo build --locked --release --target-dir /out
+
+mkdir -p packages/fotone-rust/target/aarch64-unknown-linux-musl
+
+docker run --rm --platform linux/arm64 \
+  --mount "type=bind,source=$PWD/packages/fotone-rust,target=/src,readonly" \
+  --mount "type=bind,source=$PWD/packages/fotone-rust/target/aarch64-unknown-linux-musl,target=/out" \
   --workdir /src rust:1.100.0-alpine3.24 \
   cargo build --locked --release --target-dir /out
 

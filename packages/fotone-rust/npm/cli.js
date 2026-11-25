@@ -8,8 +8,8 @@ import { fileURLToPath } from 'node:url';
 const run = async () => {
   const platform = `${process.platform}-${process.arch}`;
 
-  if (platform !== 'darwin-arm64' && platform !== 'linux-x64') {
-    throw new Error(`Unsupported platform ${platform}. Fotone supports Apple Silicon and Linux x64.`);
+  if (!['darwin-arm64', 'linux-x64', 'linux-arm64'].includes(platform)) {
+    throw new Error(`Unsupported platform ${platform}. Fotone supports Apple Silicon, Linux x64, and Linux ARM64.`);
   }
 
   const executable = fileURLToPath(new URL(`./bin/fotone-${platform}`, import.meta.url));

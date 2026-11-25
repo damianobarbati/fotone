@@ -10,6 +10,7 @@ const publishRoot = join(root, '.publish');
 const binaries = {
   'fotone-darwin-arm64': 'target/release/fotone-rust',
   'fotone-linux-x64': 'target/x86_64-unknown-linux-musl/release/fotone-rust',
+  'fotone-linux-arm64': 'target/aarch64-unknown-linux-musl/release/fotone-rust',
 };
 
 const packageManifest = {
