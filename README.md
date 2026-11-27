@@ -1,6 +1,6 @@
 # Fotone
 
-The fastest one-command static web server in the world. ⚡  
+⚡ The fastest one-command static web server in the world. ⚡  
 One command. All the power.
 
 **Fotone** is built in Rust and runs on Apple Silicon, Linux x64, and Linux ARM64.
