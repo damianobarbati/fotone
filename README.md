@@ -9,7 +9,6 @@ One command. All the power.
 
 ## Why Fotone
 
-Serve your website with one command.
 Fotone is a minimal static web server written in Rust. It runs without Node.js and serves "Hello, world!" from a Docker
 image under 4 MB. In our benchmarks, Fotone outperformed every static web server from npm that we tested.  
 Fotone can redirect visitors from `/` to a language your site supports based on their browser preferences.  
