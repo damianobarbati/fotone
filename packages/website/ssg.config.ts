@@ -5,6 +5,11 @@ export default {
     name: 'Fotone',
     url: 'https://damianobarbati.github.io/fotone/',
     locale: 'en',
-    metadata: { social: { image: { url: 'logo.png', alt: 'Fotone', width: 600, height: 600, type: 'image/png' } } },
+    metadata: {
+      social: {
+        card: 'summary_large_image',
+        image: { url: 'mark.png', alt: 'Fotone', width: 600, height: 314, type: 'image/png' },
+      },
+    },
   },
 } satisfies SsgOptions;

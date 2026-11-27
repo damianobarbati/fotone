@@ -1,8 +1,8 @@
 import cx from 'clsx-tw';
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import report from '../assets/report-combined.json' with { type: 'json' };
 import { createBenchmarkRenderer } from '../benchmarkWebGl.ts';
+import report from '../public/report-combined.json' with { type: 'json' };
 
 const { metadata, servers } = report;
 

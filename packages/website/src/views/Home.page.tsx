@@ -1,13 +1,12 @@
 import type { PageRoute } from 'virtual:ssg/router';
 import cx from 'clsx-tw';
 import { Button, Code, Metric, Mockup, Nav } from 'nano-ux';
-import logo from '../assets/logo-on-dark.svg?inline';
-import report from '../assets/report-combined.json' with { type: 'json' };
 import { BenchmarkChart } from '../components/BenchmarkChart.tsx';
 import { CLIReference } from '../components/CLIReference.tsx';
 import { ConfigReference } from '../components/ConfigReference.tsx';
 import { ContactButton } from '../components/ContactButton.tsx';
 import { IArrowUpRight, IGitHub, ILinkedIn } from '../icons.tsx';
+import report from '../public/report-combined.json' with { type: 'json' };
 
 export const route = {
   metadata: {
@@ -35,6 +34,7 @@ export const route = {
   },
 } satisfies PageRoute;
 
+const logo = `${import.meta.env.BASE_URL}logo-on-dark.svg`;
 const repository = 'https://github.com/damianobarbati/fotone';
 const quickStart = 'npx fotone ./dist --port 8080';
 
@@ -95,10 +95,7 @@ export const Page = ({ className }: PageProps) => {
           href="./"
           aria-label="Fotone home"
         >
-          <span
-            className="size-8 shrink-0 bg-current mask-[url(./assets/logo-on-dark.svg)] mask-contain"
-            aria-hidden="true"
-          />
+          <span className="size-8 shrink-0 bg-current mask-[url(/logo-on-dark.svg)] mask-contain" aria-hidden="true" />
           <span className="block text-glow-brand text-box-trim">Fotone</span>
         </a>
         <Nav
