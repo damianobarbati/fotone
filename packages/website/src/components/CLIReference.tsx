@@ -20,7 +20,7 @@ const options: [string, string, string][] = [
   ['--coop', 'off', 'Set Cross-Origin-Opener-Policy.'],
   ['--coep', 'off', 'Set Cross-Origin-Opener-Policy and Cross-Origin-Embedder-Policy.'],
   ['--pna', 'off', 'Set Access-Control-Allow-Private-Network.'],
-  ['-i, --immutable', 'off', 'Add immutable to Cache-Control.'],
+  ['-i, --immutable', 'off', 'Set the Cache-Control to immutable.'],
   ['-m, --maxage <seconds>', 'none', 'Set the Cache-Control max-age in seconds.'],
   ['-t, --timeout <seconds>', '30', 'Set the idle timeout in seconds. Use 0 to disable it.'],
   ['--env-json <names>', 'none', 'Expose a comma-separated list of environment variables as JSON at /env.'],

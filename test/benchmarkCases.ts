@@ -1,9 +1,8 @@
 export const servers = [
-  { id: 'fotone-rust', label: 'Fotone Rust', runOrder: 1 },
-  { id: 'fotone', label: 'Fotone Node', runOrder: 2 },
-  { id: 'express', label: 'Express', runOrder: 5 },
-  { id: 'fastify', label: 'Fastify', runOrder: 3 },
-  { id: 'hono', label: 'Hono', runOrder: 4 },
+  { id: 'fotone', label: 'Fotone', runOrder: 1 },
+  { id: 'express', label: 'Express', runOrder: 4 },
+  { id: 'fastify', label: 'Fastify', runOrder: 2 },
+  { id: 'hono', label: 'Hono', runOrder: 3 },
 ] as const;
 
 export const workloads = [

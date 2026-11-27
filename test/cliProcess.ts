@@ -5,12 +5,10 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 
 export const host = '127.0.0.1';
-export const nodeCli = fileURLToPath(new URL('../packages/fotone-node/dist/index.js', import.meta.url));
-export const rustCli = fileURLToPath(new URL('../packages/fotone-rust/target/release/fotone-rust', import.meta.url));
+export const fotoneCli = fileURLToPath(new URL('../packages/fotone/target/release/fotone', import.meta.url));
 
 export const unusedPort = async () => {
   const listener = createServer();
-
   listener.listen(0, host);
   await once(listener, 'listening');
 

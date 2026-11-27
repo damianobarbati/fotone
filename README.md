@@ -7,10 +7,20 @@ One command. All the power.
 
 [Documentation and benchmarks here.](https://damianobarbati.github.io/fotone/)
 
+## Why Fotone
+
+Serve your website with one command.
+Fotone is a minimal static web server written in Rust. It runs without Node.js and serves "Hello, world!" from a Docker
+image under 4 MB. In our benchmarks, Fotone outperformed every static web server from npm that we tested.  
+Fotone can redirect visitors from `/` to a language your site supports based on their browser preferences.  
+It serves precompressed Brotli and gzip assets and supports SPA fallback, cache headers, COOP and COEP headers.  
+If your app needs different settings in staging and production, Fotone can expose selected environment variables to the
+browser at runtime, so you can use the same image in both.
+
 ## Usage
 
 ```sh
-npx fotone ./dist --port 8080 --spa
+npx fotone ./dist --port 8080
 npx fotone --help
 ```
 
@@ -79,19 +89,19 @@ Run from the repository root on Apple Silicon with Rust and Docker installed.
 node pack.ts --sync-version
 pnpm build
 
-mkdir -p packages/fotone-rust/target/x86_64-unknown-linux-musl
+mkdir -p packages/fotone/target/x86_64-unknown-linux-musl
 
 docker run --rm --platform linux/amd64 \
-  --mount "type=bind,source=$PWD/packages/fotone-rust,target=/src,readonly" \
-  --mount "type=bind,source=$PWD/packages/fotone-rust/target/x86_64-unknown-linux-musl,target=/out" \
+  --mount "type=bind,source=$PWD/packages/fotone,target=/src,readonly" \
+  --mount "type=bind,source=$PWD/packages/fotone/target/x86_64-unknown-linux-musl,target=/out" \
   --workdir /src rust:1.100.0-alpine3.24 \
   cargo build --locked --release --target-dir /out
 
-mkdir -p packages/fotone-rust/target/aarch64-unknown-linux-musl
+mkdir -p packages/fotone/target/aarch64-unknown-linux-musl
 
 docker run --rm --platform linux/arm64 \
-  --mount "type=bind,source=$PWD/packages/fotone-rust,target=/src,readonly" \
-  --mount "type=bind,source=$PWD/packages/fotone-rust/target/aarch64-unknown-linux-musl,target=/out" \
+  --mount "type=bind,source=$PWD/packages/fotone,target=/src,readonly" \
+  --mount "type=bind,source=$PWD/packages/fotone/target/aarch64-unknown-linux-musl,target=/out" \
   --workdir /src rust:1.100.0-alpine3.24 \
   cargo build --locked --release --target-dir /out
 

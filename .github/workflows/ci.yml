@@ -95,14 +95,14 @@ jobs:
       - name: Build Apple Silicon binary
         run: |
           node pack.ts --sync-version
-          cargo build --locked --release --manifest-path packages/fotone-rust/Cargo.toml
-          packages/fotone-rust/target/release/fotone-rust --version
+          cargo build --locked --release --manifest-path packages/fotone/Cargo.toml
+          packages/fotone/target/release/fotone --version
 
       - name: Upload Apple Silicon binary
         uses: actions/upload-artifact@v7
         with:
           name: fotone-darwin-arm64
-          path: packages/fotone-rust/target/release/fotone-rust
+          path: packages/fotone/target/release/fotone
           if-no-files-found: error
 
   linux:
@@ -136,20 +136,20 @@ jobs:
           RUST_TARGET: ${{ matrix.target }}
         run: |
           node pack.ts --sync-version
-          target_dir="$PWD/packages/fotone-rust/target/$RUST_TARGET"
+          target_dir="$PWD/packages/fotone/target/$RUST_TARGET"
           mkdir -p "$target_dir"
           docker run --rm --platform "$DOCKER_PLATFORM" \
-            --mount "type=bind,source=$PWD/packages/fotone-rust,target=/src,readonly" \
+            --mount "type=bind,source=$PWD/packages/fotone,target=/src,readonly" \
             --mount "type=bind,source=$target_dir,target=/out" \
             --workdir /src rust:1.100.0-alpine3.24 \
             cargo build --locked --release --target-dir /out
-          "$target_dir/release/fotone-rust" --version
+          "$target_dir/release/fotone" --version
 
       - name: Upload Linux binary
         uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact }}
-          path: packages/fotone-rust/target/${{ matrix.target }}/release/fotone-rust
+          path: packages/fotone/target/${{ matrix.target }}/release/fotone
           if-no-files-found: error
 
   release:
@@ -178,19 +178,19 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: fotone-darwin-arm64
-          path: packages/fotone-rust/target/release
+          path: packages/fotone/target/release
 
       - name: Download Linux x64 binary
         uses: actions/download-artifact@v8
         with:
           name: fotone-linux-x64
-          path: packages/fotone-rust/target/x86_64-unknown-linux-musl/release
+          path: packages/fotone/target/x86_64-unknown-linux-musl/release
 
       - name: Download Linux ARM64 binary
         uses: actions/download-artifact@v8
         with:
           name: fotone-linux-arm64
-          path: packages/fotone-rust/target/aarch64-unknown-linux-musl/release
+          path: packages/fotone/target/aarch64-unknown-linux-musl/release
 
       - name: Publish Fotone to npm
         env:

@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "startedAt": "2026-11-24T23:01:41.707Z",
+    "startedAt": "2026-11-27T00:13:22.846Z",
     "cpu": "Apple M3",
     "httpVersion": "HTTP/1.1",
     "concurrency": 100,
@@ -9,12 +9,8 @@
   },
   "servers": [
     {
-      "id": "fotone-rust",
-      "label": "Fotone Rust"
-    },
-    {
       "id": "fotone",
-      "label": "Fotone Node"
+      "label": "Fotone"
     },
     {
       "id": "express",
@@ -49,164 +45,148 @@
   ],
   "results": [
     {
-      "serverId": "fotone-rust",
-      "workloadId": "small",
-      "requestsPerSecond": 78645.70858283434,
-      "p95Ms": 24,
-      "idleRssMiB": 6.7,
-      "peakRssMiB": 22.1
-    },
-    {
-      "serverId": "fotone-rust",
-      "workloadId": "large",
-      "requestsPerSecond": 1864.8076923076922,
-      "p95Ms": 621,
-      "idleRssMiB": 6.7,
-      "peakRssMiB": 67.1
-    },
-    {
-      "serverId": "fotone-rust",
-      "workloadId": "brotli",
-      "requestsPerSecond": 100625.79365079365,
-      "p95Ms": 19,
-      "idleRssMiB": 6.7,
-      "peakRssMiB": 16.7
-    },
-    {
-      "serverId": "fotone-rust",
-      "workloadId": "revalidation",
-      "requestsPerSecond": 97303.76984126984,
-      "p95Ms": 21,
-      "idleRssMiB": 6.7,
-      "peakRssMiB": 16.7
-    },
-    {
       "serverId": "fotone",
       "workloadId": "small",
-      "requestsPerSecond": 55668.4,
-      "p95Ms": 21,
-      "idleRssMiB": 81.1,
-      "peakRssMiB": 234.7
+      "cpuUsPerRequest": 32.866762859673656,
+      "requestsPerSecond": 134890.0596421471,
+      "p95Ms": 10,
+      "idleRssMiB": 6.8,
+      "peakRssMiB": 12.5
     },
     {
       "serverId": "fotone",
       "workloadId": "large",
-      "requestsPerSecond": 1489.0438247011953,
-      "p95Ms": 709,
-      "idleRssMiB": 81,
-      "peakRssMiB": 354.2
+      "cpuUsPerRequest": 179.3185893604304,
+      "requestsPerSecond": 2619.1780821917805,
+      "p95Ms": 891,
+      "idleRssMiB": 6.8,
+      "peakRssMiB": 12.9
     },
     {
       "serverId": "fotone",
       "workloadId": "brotli",
-      "requestsPerSecond": 57629.6,
-      "p95Ms": 20,
-      "idleRssMiB": 81.2,
-      "peakRssMiB": 238.1
+      "cpuUsPerRequest": 31.93321700819614,
+      "requestsPerSecond": 141510.53677932406,
+      "p95Ms": 10,
+      "idleRssMiB": 6.8,
+      "peakRssMiB": 13.1
     },
     {
       "serverId": "fotone",
       "workloadId": "revalidation",
-      "requestsPerSecond": 63139.6,
-      "p95Ms": 19,
-      "idleRssMiB": 81.1,
-      "peakRssMiB": 221.3
+      "cpuUsPerRequest": 30.896883653785924,
+      "requestsPerSecond": 136476.5407554672,
+      "p95Ms": 13,
+      "idleRssMiB": 6.8,
+      "peakRssMiB": 13.8
     },
     {
       "serverId": "express",
       "workloadId": "small",
-      "requestsPerSecond": 30283,
-      "p95Ms": 37,
-      "idleRssMiB": 79.3,
-      "peakRssMiB": 214.9
+      "cpuUsPerRequest": 82.33766858186888,
+      "requestsPerSecond": 33211.17764471058,
+      "p95Ms": 34,
+      "idleRssMiB": 79.4,
+      "peakRssMiB": 191.7
     },
     {
       "serverId": "express",
       "workloadId": "large",
-      "requestsPerSecond": 1720.5936920222634,
-      "p95Ms": 745,
-      "idleRssMiB": 79.9,
-      "peakRssMiB": 349.6
+      "cpuUsPerRequest": 1319.5854257933538,
+      "requestsPerSecond": 1779.277566539924,
+      "p95Ms": 638,
+      "idleRssMiB": 80.3,
+      "peakRssMiB": 335.9
     },
     {
       "serverId": "express",
       "workloadId": "brotli",
-      "requestsPerSecond": 30939.8,
-      "p95Ms": 37,
-      "idleRssMiB": 79.7,
-      "peakRssMiB": 255.2
+      "cpuUsPerRequest": 82.83070962710458,
+      "requestsPerSecond": 31736.327345309383,
+      "p95Ms": 35,
+      "idleRssMiB": 80.2,
+      "peakRssMiB": 238.2
     },
     {
       "serverId": "express",
       "workloadId": "revalidation",
-      "requestsPerSecond": 55413.17365269461,
-      "p95Ms": 29,
-      "idleRssMiB": 80,
-      "peakRssMiB": 157.3
+      "cpuUsPerRequest": 21.615105633436904,
+      "requestsPerSecond": 57737.4,
+      "p95Ms": 28,
+      "idleRssMiB": 80.2,
+      "peakRssMiB": 157.2
     },
     {
       "serverId": "fastify",
       "workloadId": "small",
-      "requestsPerSecond": 24375.8,
-      "p95Ms": 48,
-      "idleRssMiB": 84.2,
+      "cpuUsPerRequest": 133.31115261593837,
+      "requestsPerSecond": 26396.606786427146,
+      "p95Ms": 45,
+      "idleRssMiB": 84.4,
+      "peakRssMiB": 248.6
+    },
+    {
+      "serverId": "fastify",
+      "workloadId": "large",
+      "cpuUsPerRequest": 1230.0748991741887,
+      "requestsPerSecond": 2018.2170542635658,
+      "p95Ms": 579,
+      "idleRssMiB": 84.5,
+      "peakRssMiB": 296.7
+    },
+    {
+      "serverId": "fastify",
+      "workloadId": "brotli",
+      "cpuUsPerRequest": 128.53701134190706,
+      "requestsPerSecond": 28914.371257485032,
+      "p95Ms": 39,
+      "idleRssMiB": 84.4,
+      "peakRssMiB": 247.3
+    },
+    {
+      "serverId": "fastify",
+      "workloadId": "revalidation",
+      "cpuUsPerRequest": 69.71350933495748,
+      "requestsPerSecond": 42689,
+      "p95Ms": 26,
+      "idleRssMiB": 84.3,
+      "peakRssMiB": 164
+    },
+    {
+      "serverId": "hono",
+      "workloadId": "small",
+      "cpuUsPerRequest": 113.09162769766576,
+      "requestsPerSecond": 20443.6,
+      "p95Ms": 56,
+      "idleRssMiB": 69.6,
+      "peakRssMiB": 276.8
+    },
+    {
+      "serverId": "hono",
+      "workloadId": "large",
+      "cpuUsPerRequest": 1614.1073497232592,
+      "requestsPerSecond": 1547.6095617529882,
+      "p95Ms": 690,
+      "idleRssMiB": 69.7,
+      "peakRssMiB": 383.6
+    },
+    {
+      "serverId": "hono",
+      "workloadId": "brotli",
+      "cpuUsPerRequest": 115.296237435342,
+      "requestsPerSecond": 19757.8,
+      "p95Ms": 57,
+      "idleRssMiB": 69.8,
       "peakRssMiB": 246.8
     },
     {
-      "serverId": "fastify",
-      "workloadId": "large",
-      "requestsPerSecond": 1678.776290630975,
-      "p95Ms": 787,
-      "idleRssMiB": 84.5,
-      "peakRssMiB": 314.6
-    },
-    {
-      "serverId": "fastify",
-      "workloadId": "brotli",
-      "requestsPerSecond": 26581.237524950102,
-      "p95Ms": 43,
-      "idleRssMiB": 84.1,
-      "peakRssMiB": 251.1
-    },
-    {
-      "serverId": "fastify",
+      "serverId": "hono",
       "workloadId": "revalidation",
-      "requestsPerSecond": 37954.69061876248,
-      "p95Ms": 30,
-      "idleRssMiB": 84.3,
-      "peakRssMiB": 163.6
-    },
-    {
-      "serverId": "hono",
-      "workloadId": "small",
-      "requestsPerSecond": 17453.09381237525,
-      "p95Ms": 68,
-      "idleRssMiB": 69.7,
-      "peakRssMiB": 253.5
-    },
-    {
-      "serverId": "hono",
-      "workloadId": "large",
-      "requestsPerSecond": 1386.083499005964,
-      "p95Ms": 722,
-      "idleRssMiB": 69.8,
-      "peakRssMiB": 379.6
-    },
-    {
-      "serverId": "hono",
-      "workloadId": "brotli",
-      "requestsPerSecond": 19183.6,
+      "cpuUsPerRequest": 68.99553463479114,
+      "requestsPerSecond": 24813.2,
       "p95Ms": 59,
       "idleRssMiB": 69.8,
-      "peakRssMiB": 250.8
-    },
-    {
-      "serverId": "hono",
-      "workloadId": "revalidation",
-      "requestsPerSecond": 23650.299401197604,
-      "p95Ms": 61,
-      "idleRssMiB": 69.8,
-      "peakRssMiB": 279
+      "peakRssMiB": 331.4
     }
   ]
 }

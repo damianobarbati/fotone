@@ -24,7 +24,7 @@ use std::{
     task::{Context, Poll},
     time::Instant,
 };
-use tokio::{io::AsyncReadExt, sync::OwnedSemaphorePermit};
+use tokio::io::AsyncReadExt;
 use tokio_util::io::ReaderStream;
 
 const METHODS: &str = "GET, HEAD";
@@ -202,17 +202,6 @@ impl State {
         };
 
         reply.static_file(path, relative).await
-    }
-}
-
-struct ReservedBytes {
-    bytes: Bytes,
-    _permit: OwnedSemaphorePermit,
-}
-
-impl AsRef<[u8]> for ReservedBytes {
-    fn as_ref(&self) -> &[u8] {
-        self.bytes.as_ref()
     }
 }
 
@@ -549,14 +538,9 @@ impl<'a> Reply<'a> {
             header::CACHE_CONTROL,
             self.state.config.cache_control.clone(),
         );
-        headers.insert(
-            header::LAST_MODIFIED,
-            HeaderValue::from_str(&asset.modified()).expect("HTTP date"),
-        );
-        headers.insert(
-            header::ETAG,
-            HeaderValue::from_str(&asset.tag()).expect("valid ETag"),
-        );
+        let (modified, tag) = asset.validators();
+        headers.insert(header::LAST_MODIFIED, modified);
+        headers.insert(header::ETAG, tag);
         headers.insert(
             header::CONTENT_TYPE,
             HeaderValue::from_static(mime_type(&asset.path)),
@@ -587,12 +571,7 @@ impl<'a> Reply<'a> {
 
         if self.request.method() != Method::HEAD {
             match self.state.files.content(asset).await? {
-                Some(Content::Buffered(bytes, permit)) => {
-                    body = ResponseBody::full(Bytes::from_owner(ReservedBytes {
-                        bytes,
-                        _permit: permit,
-                    }));
-                }
+                Some(Content::Buffered(bytes)) => body = ResponseBody::full(bytes),
                 Some(Content::Stream(file)) => body = ResponseBody::stream(file, size),
                 None => return Ok(None),
             }

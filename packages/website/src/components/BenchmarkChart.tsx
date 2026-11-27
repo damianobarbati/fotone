@@ -4,9 +4,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import report from '../assets/report-combined.json' with { type: 'json' };
 import { createBenchmarkRenderer } from '../benchmarkWebGl.ts';
 
-const { metadata } = report;
-const nodeServerId = 'fotone';
-const servers = report.servers.filter(({ id }) => id !== nodeServerId);
+const { metadata, servers } = report;
 
 const chartWorkloads = [
   { id: 'small', label: '4 KiB' },
@@ -14,9 +12,7 @@ const chartWorkloads = [
 ];
 
 const workloads = chartWorkloads.map(({ id, label }) => {
-  const measurements = report.results.filter(
-    ({ serverId, workloadId }) => serverId !== nodeServerId && workloadId === id,
-  );
+  const measurements = report.results.filter(({ workloadId }) => workloadId === id);
 
   const result = {
     id,
@@ -119,7 +115,6 @@ export const BenchmarkChart = ({ className }: BenchmarkChartProps) => {
     };
 
     const resize = new ResizeObserver(draw);
-
     resize.observe(canvas);
     canvas.addEventListener('webglcontextlost', onContextLost);
     canvas.addEventListener('webglcontextrestored', initialize);
@@ -209,7 +204,7 @@ export const BenchmarkChart = ({ className }: BenchmarkChartProps) => {
               key={servers[index].id}
               className="group grid min-w-0 grid-rows-[1fr_auto] gap-[0.15rem] text-sm leading-[inherit] max-phone:text-xs"
             >
-              <span>{servers[index].id === 'fotone-rust' ? 'Fotone' : servers[index].label}</span>
+              <span>{servers[index].label}</span>
               <strong className="font-mono text-base leading-[normal] font-strong group-first:text-mint max-phone:text-[0.9rem] max-[375px]:text-xs">
                 {format.format(value)}
               </strong>

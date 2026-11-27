@@ -54,7 +54,9 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let config = Config::load(&options)?;
+    let parallelism = std::thread::available_parallelism().map_or(1, usize::from);
     let runtime = tokio::runtime::Builder::new_multi_thread()
+        .max_blocking_threads(parallelism.max(8))
         .enable_all()
         .build()?;
     runtime.block_on(listen(config))?;

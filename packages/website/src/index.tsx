@@ -1,10 +1,16 @@
-import { createRoot, hydrateRoot } from 'react-dom/client';
+import type React from 'react';
+import favicon from './assets/logo-on-light.svg?inline';
 import './index.css';
-import { App } from './components/App.tsx';
 
-const root = document.getElementById('root');
+type LayoutProps = { children: React.ReactNode };
 
-if (root) {
-  if (root.hasChildNodes()) hydrateRoot(root, <App />);
-  else createRoot(root).render(<App />);
-}
+export const Layout = ({ children }: LayoutProps) => {
+  const result = (
+    <>
+      <link rel="icon" type="image/svg+xml" href={favicon} />
+      {children}
+    </>
+  );
+
+  return result;
+};

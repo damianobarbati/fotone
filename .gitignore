@@ -5,6 +5,5 @@ dist/
 .DS_Store
 
 /.publish/
-/.reports/*
-!/.reports/.gitkeep
-/packages/fotone-rust/target/
+/.report/*
+/packages/fotone/target/

@@ -13,7 +13,6 @@ const createFastifyServer = async () => {
   const { default: fastifyStatic } = await import('@fastify/static');
 
   const app = fastify({ logger: false, keepAliveTimeout: 5000, connectionTimeout: 30_000 });
-
   await app.register(fastifyStatic, { root, index: false, preCompressed: true, etag: true });
   await app.listen({ host, port });
 
@@ -87,7 +86,6 @@ const createExpressServer = async () => {
   const { default: express } = await import('express');
 
   const app = express();
-
   app.disable('x-powered-by');
 
   const serve = express.static(root, {

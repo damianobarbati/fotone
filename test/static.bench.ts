@@ -7,7 +7,7 @@ import { brotliCompressSync } from 'node:zlib';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { servers, workloads } from './benchmarkCases.ts';
 import { fastifyLoad as load, runRound, summarizeRound } from './benchmarkLoad.ts';
-import { launchBenchmarkServer, readRss, startSampling, toMiB } from './benchmarkProcess.ts';
+import { launchBenchmarkServer, readCpuSeconds, readRss, startSampling, toMiB } from './benchmarkProcess.ts';
 import { host, unusedPort } from './cliProcess.ts';
 
 const warmupDuration = Math.min(2, load.duration);
@@ -125,17 +125,23 @@ describe.each(orderedServers)('$id', ({ id: serverName }) => {
           const options = { ...load, url, headers, skipAggregateResult: true } as const;
           const roundOptions = { options, signal, expectedStatus: sample.expected };
 
-          sampler = await startSampling({ pid: server.pid });
-
           await runRound({ ...roundOptions, options: { ...options, duration: warmupDuration }, phase: 'warmup' });
 
+          sampler = await startSampling({ pid: server.pid });
+
+          const startCpu = await readCpuSeconds(server.pid);
           const round = await runRound({ ...roundOptions, phase: 'measurement' });
+
+          const cpuUsPerRequest =
+            (((await readCpuSeconds(server.pid)) - startCpu) * 1e6) / round.totalCompletedRequests;
+
           const peakRss = await sampler.finish();
           const { requestsPerSecond, p95Ms } = summarizeRound({ round });
           const idleRssMiB = toMiB(idleRss);
           const peakRssMiB = toMiB(peakRss);
 
           Object.assign(task.meta, {
+            cpuUsPerRequest,
             requestsPerSecond,
             p95Ms,
             idleRssMiB,
@@ -145,7 +151,7 @@ describe.each(orderedServers)('$id', ({ id: serverName }) => {
             duration: load.duration,
           });
 
-          summary = `${serverName} | ${title} | ${Math.round(requestsPerSecond)} req/s | p95 ${p95Ms.toFixed(2)} ms | idle RSS ${idleRssMiB.toFixed(1)} MiB | peak sampled RSS ${peakRssMiB.toFixed(1)} MiB`;
+          summary = `${serverName} | ${title} | ${Math.round(requestsPerSecond)} req/s | CPU ${cpuUsPerRequest.toFixed(2)} µs/req | p95 ${p95Ms.toFixed(2)} ms | idle RSS ${idleRssMiB.toFixed(1)} MiB | peak sampled RSS ${peakRssMiB.toFixed(1)} MiB`;
         } finally {
           if (sampler) await sampler.stop();
 

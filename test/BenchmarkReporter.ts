@@ -4,9 +4,9 @@ import { cpus } from 'node:os';
 import type { Reporter, SerializedError, TestCase, TestModule, TestRunEndReason, Vitest } from 'vitest/node';
 import { servers, workloads } from './benchmarkCases.ts';
 
-const reportDirectory = new URL('../.reports/', import.meta.url);
+const reportDirectory = new URL('../.report/', import.meta.url);
 const reportFile = new URL('report-combined.json', reportDirectory);
-const metrics = ['requestsPerSecond', 'p95Ms', 'idleRssMiB', 'peakRssMiB'] as const;
+const metrics = ['cpuUsPerRequest', 'requestsPerSecond', 'p95Ms', 'idleRssMiB', 'peakRssMiB'] as const;
 const loadSettings = ['concurrency', 'pipelining', 'duration'] as const;
 
 type Measurement = Record<(typeof metrics)[number] | (typeof loadSettings)[number], number>;
@@ -33,9 +33,11 @@ const readMeasurements = (cases: TestCase[]) => {
         throw new Error(`Invalid benchmark metrics for ${serverId} / ${title}.`);
       }
 
-      const { requestsPerSecond, p95Ms, idleRssMiB, peakRssMiB, concurrency, pipelining, duration } = meta;
+      const { cpuUsPerRequest, requestsPerSecond, p95Ms, idleRssMiB, peakRssMiB, concurrency, pipelining, duration } =
+        meta;
+
       const load = { concurrency, pipelining, duration };
-      const result = { serverId, workloadId, requestsPerSecond, p95Ms, idleRssMiB, peakRssMiB, load };
+      const result = { serverId, workloadId, cpuUsPerRequest, requestsPerSecond, p95Ms, idleRssMiB, peakRssMiB, load };
       return result;
     }),
   );

@@ -12,17 +12,17 @@
   "dependencies": {
     "@fontsource-variable/science-gothic": "^5.3.0",
     "clsx-tw": "^1.0.9",
-    "nano-ux": "^0.0.16",
+    "nano-ux": "^0.0.31",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-hook-form": "^7.92.0",
     "swr": "^2.4.1"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.3.5",
-    "@types/react": "^19.3.0",
+    "@types/react": "^19.3.3",
     "@types/react-dom": "^19.3.0",
+    "nano-ssg": "0.0.8",
     "tailwindcss": "^4.3.5",
-    "vite": "^8.3.8"
+    "vite": "^8.4.0"
   }
 }

@@ -9,7 +9,11 @@ if (!Number.isSafeInteger(duration) || duration < 1) {
 
 export const fastifyLoad = { connections: 100, pipelining: 10, duration };
 
-type LoadOptions = typeof fastifyLoad & { url: string; headers?: Record<string, string>; skipAggregateResult: true };
+type LoadOptions = typeof fastifyLoad & {
+  url: string | string[];
+  headers?: Record<string, string>;
+  skipAggregateResult: true;
+};
 
 type Round = {
   latencies: string;
@@ -33,7 +37,6 @@ export const runRound = async ({
   signal: AbortSignal;
 }) => {
   const deadline = AbortSignal.any([signal, AbortSignal.timeout((options.duration + 15) * 1_000)]);
-
   deadline.throwIfAborted();
 
   const completed = Promise.withResolvers<Round>();

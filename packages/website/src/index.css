@@ -1,5 +1,6 @@
 @import "nano-ux/tailwind.css";
 @source "./components";
+@source "./views";
 
 @custom-variant max-tablet (@media (width <= 800px));
 @custom-variant max-phone (@media (width <= 520px));
@@ -18,8 +19,9 @@
   --font-brand: "Science Gothic", system-ui, sans-serif;
 }
 
-:root.dark {
-  --color-brand: var(--color-mintlight);
+:root {
+  color-scheme: dark;
+  --color-brand: var(--color-seafoam);
 }
 
 @layer base {
@@ -31,7 +33,7 @@
 @layer components {
   .site-link,
   .site-action {
-    @apply hover:text-mintlight focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-focus;
+    @apply hover:text-seafoam focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-focus;
   }
 
   .site-action {
@@ -39,7 +41,13 @@
   }
 
   .doc-section {
-    @apply grid scroll-mt-5 gap-5 border-t border-divider py-14 max-phone:py-11;
+    @apply relative grid scroll-mt-5 gap-5 border-t border-divider py-14 max-phone:py-11;
+  }
+
+  .doc-section::before {
+    content: "";
+    @apply pointer-events-none absolute inset-x-0 -top-px h-px;
+    @apply bg-divider glow-[color:var(--theme-primary,var(--color-brand))];
   }
 
   .doc-section-split {
@@ -62,13 +70,11 @@
     @apply max-w-[64ch] last:mb-0;
   }
 
-  .feature-grid h3,
-  .capabilities h2 {
+  .feature-grid h3 {
     @apply mb-[0.55rem] text-[1.15rem] font-bold;
   }
 
-  .feature-grid p,
-  .capabilities p {
+  .feature-grid p {
     @apply m-0 max-w-none leading-[1.65];
   }
 }
@@ -87,7 +93,7 @@
   @apply inline-flex min-h-9 cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-2.5 text-sm font-medium text-fg select-none hover:bg-mint/10;
 
   &:has(input:checked) {
-    @apply bg-mint/20 text-mintlight;
+    @apply bg-mint/20 text-seafoam;
   }
 
   &:has(input:focus-visible) {

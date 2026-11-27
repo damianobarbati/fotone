@@ -4,13 +4,13 @@ import manifest from './package.json' with { type: 'json' };
 
 const { version } = manifest;
 const root = import.meta.dirname;
-const rustRoot = join(root, 'packages/fotone-rust');
+const packageRoot = join(root, 'packages/fotone');
 const publishRoot = join(root, '.publish');
 
 const binaries = {
-  'fotone-darwin-arm64': 'target/release/fotone-rust',
-  'fotone-linux-x64': 'target/x86_64-unknown-linux-musl/release/fotone-rust',
-  'fotone-linux-arm64': 'target/aarch64-unknown-linux-musl/release/fotone-rust',
+  'fotone-darwin-arm64': 'target/release/fotone',
+  'fotone-linux-x64': 'target/x86_64-unknown-linux-musl/release/fotone',
+  'fotone-linux-arm64': 'target/aarch64-unknown-linux-musl/release/fotone',
 };
 
 const packageManifest = {
@@ -28,18 +28,18 @@ const packageManifest = {
 
 const syncCargoVersion = async () => {
   const files = [
-    { name: 'Cargo.toml', pattern: /^(?<prefix>\[package\]\r?\nname = "fotone-rust"\r?\nversion = ")[^"\r\n]+"$/m },
-    { name: 'Cargo.lock', pattern: /^(?<prefix>\[\[package\]\]\r?\nname = "fotone-rust"\r?\nversion = ")[^"\r\n]+"$/m },
+    { name: 'Cargo.toml', pattern: /^(?<prefix>\[package\]\r?\nname = "fotone"\r?\nversion = ")[^"\r\n]+"$/m },
+    { name: 'Cargo.lock', pattern: /^(?<prefix>\[\[package\]\]\r?\nname = "fotone"\r?\nversion = ")[^"\r\n]+"$/m },
   ];
 
   const updates: { path: string; updated: string }[] = [];
 
   for (const { name, pattern } of files) {
-    const path = join(rustRoot, name);
+    const path = join(packageRoot, name);
     const content = await readFile(path, 'utf8');
 
     if (!pattern.test(content)) {
-      throw new Error(`Cannot find the fotone-rust version in ${name}.`);
+      throw new Error(`Cannot find the fotone version in ${name}.`);
     }
 
     const updated = content.replace(pattern, `$<prefix>${version}"`);
@@ -71,13 +71,13 @@ const pack = async () => {
     for (const [name, source] of Object.entries(binaries)) {
       const executable = join(bin, name);
 
-      await copyFile(join(rustRoot, source), executable);
+      await copyFile(join(packageRoot, source), executable);
       await chmod(executable, 0o755);
     }
 
     const launcher = join(stage, 'cli.js');
 
-    await copyFile(join(rustRoot, 'npm/cli.js'), launcher);
+    await copyFile(join(packageRoot, 'npm/cli.js'), launcher);
     await chmod(launcher, 0o755);
     await writeFile(join(stage, 'README.md'), `${intro.trimEnd()}\n`);
     await writeFile(join(stage, 'package.json'), JSON.stringify(packageManifest, null, 2));

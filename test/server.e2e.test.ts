@@ -8,7 +8,7 @@ import { dirname, join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { brotliCompressSync, gzipSync } from 'node:zlib';
 import { describe, expect, it, type TestContext } from 'vitest';
-import { host, nodeCli, rustCli, startProcess } from './cliProcess.ts';
+import { fotoneCli, host, startProcess } from './cliProcess.ts';
 
 type FixtureInput = {
   files: Record<string, string | Buffer>;
@@ -16,19 +16,7 @@ type FixtureInput = {
   onTestFinished: TestContext['onTestFinished'];
 };
 
-type Target = 'Node CLI' | 'Rust CLI';
-
-const startCli = ({
-  target,
-  root,
-  values,
-  port,
-}: {
-  target: Target;
-  root: string;
-  values: FixtureInput['values'];
-  port: number;
-}) => {
+const startCli = ({ root, values, port }: { root: string; values: FixtureInput['values']; port: number }) => {
   const args = [root, '--host', host, '--port', String(port)];
 
   for (const [name, value] of Object.entries(values ?? {})) {
@@ -39,14 +27,11 @@ const startCli = ({
     }
   }
 
-  const options =
-    target === 'Rust CLI' ? { executable: rustCli, args } : { executable: process.execPath, args: [nodeCli, ...args] };
-
-  const result = startProcess(options);
+  const result = startProcess({ executable: fotoneCli, args });
   return result;
 };
 
-const startFixture = async ({ files, values, target, onTestFinished }: FixtureInput & { target: Target }) => {
+const fixture = async ({ files, values, onTestFinished }: FixtureInput) => {
   const root = await mkdtemp(join(tmpdir(), 'fotone-test-'));
 
   const remove = async () => {
@@ -64,7 +49,7 @@ const startFixture = async ({ files, values, target, onTestFinished }: FixtureIn
       await writeFile(path, content);
     }
 
-    child = startCli({ target, root, values, port: 0 });
+    child = startCli({ root, values, port: 0 });
 
     try {
       address = { address: host, port: await child.waitUntilListening() };
@@ -128,14 +113,7 @@ const startFixture = async ({ files, values, target, onTestFinished }: FixtureIn
   return result;
 };
 
-const targets: Target[] = ['Node CLI', 'Rust CLI'];
-
-describe.each(targets)('Fotone %s', (target) => {
-  const fixture = async (input: FixtureInput) => {
-    const result = await startFixture({ ...input, target });
-    return result;
-  };
-
+describe('Fotone CLI', () => {
   describe('files', () => {
     it('serves directory index pages without SPA fallback', async ({ onTestFinished }) => {
       const test = await fixture({
@@ -246,6 +224,27 @@ describe.each(targets)('Fotone %s', (target) => {
       const updated = await test.send('/file.txt', { headers: { 'if-none-match': String(initial.headers.etag) } });
       expect(updated.status).toEqual(200);
       expect(updated.body.toString()).toEqual('new');
+    });
+
+    it('uses the configured validator for conditional HEAD requests', async ({ onTestFinished }) => {
+      const test = await fixture({
+        onTestFinished,
+        files: { 'file.txt': 'contents' },
+        values: { header: 'ETag: "release"' },
+      });
+
+      const response = await test.send('/file.txt', { method: 'HEAD', headers: { 'if-none-match': '"release"' } });
+      expect(response).toMatchObject({ status: 304, headers: { etag: '"release"' }, body: Buffer.alloc(0) });
+    });
+
+    it('serves a replacement file when a client sends the old validator', async ({ onTestFinished }) => {
+      const test = await fixture({ onTestFinished, files: { 'asset.txt': 'first', 'next.txt': 'replacement' } });
+      const initial = await test.send('/asset.txt');
+
+      await rename(join(test.root, 'next.txt'), join(test.root, 'asset.txt'));
+
+      const updated = await test.send('/asset.txt', { headers: { 'if-none-match': String(initial.headers.etag) } });
+      expect(updated).toMatchObject({ status: 200, body: Buffer.from('replacement') });
     });
 
     it('blocks a symlinked directory even when its file body was cached earlier', async ({ onTestFinished }) => {
@@ -496,7 +495,6 @@ describe.each(targets)('Fotone %s', (target) => {
       await writeFile(configFile, '{"trustedProxies":["127.0.0.1","10.0.0.0/8"]}');
 
       const test = await fixture({ onTestFinished, files: {}, values: { config: configFile } });
-
       await test.send('/trusted', { headers: { 'x-forwarded-for': '192.0.2.8, 203.0.113.42, 10.0.0.1' } });
       await test.send('/malformed', { headers: { 'x-forwarded-for': 'invalid, 10.0.0.1' } });
 
@@ -506,7 +504,6 @@ describe.each(targets)('Fotone %s', (target) => {
 
     it('ignores forwarded addresses from untrusted peers', async ({ onTestFinished }) => {
       const test = await fixture({ onTestFinished, files: {} });
-
       await test.send('/untrusted', { headers: { 'x-forwarded-for': '192.0.2.8' } });
 
       await expect.poll(test.processOutput).toMatch(/127\.0\.0\.1.*\/untrusted/);
@@ -517,7 +514,7 @@ describe.each(targets)('Fotone %s', (target) => {
     it('fails to listen when its fixed port is occupied', async ({ onTestFinished }) => {
       const test = await fixture({ onTestFinished, files: {} });
 
-      const child = startCli({ target, root: test.root, values: {}, port: test.address.port });
+      const child = startCli({ root: test.root, values: {}, port: test.address.port });
 
       try {
         await expect(child.waitUntilListening()).rejects.toThrow();

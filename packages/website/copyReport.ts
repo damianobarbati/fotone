@@ -1,6 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 
-const source = new URL('../../.reports/report-combined.json', import.meta.url);
+const source = new URL('../../.report/report-combined.json', import.meta.url);
 const asset = new URL('./src/assets/report-combined.json', import.meta.url);
 
 const copyReport = async () => {

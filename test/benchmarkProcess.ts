@@ -2,9 +2,36 @@ import { execFile } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import { stripTypeScriptTypes } from 'node:module';
 import { promisify } from 'node:util';
-import { host, nodeCli, rustCli, startProcess } from './cliProcess.ts';
+import { fotoneCli, host, startProcess } from './cliProcess.ts';
 
 const run = promisify(execFile);
+
+let ticksPerSecond: number | undefined;
+
+export const readCpuSeconds = async (pid: number) => {
+  if (process.platform === 'linux') {
+    if (ticksPerSecond === undefined) {
+      const { stdout } = await run('getconf', ['CLK_TCK']);
+
+      ticksPerSecond = Number(stdout.trim());
+
+      if (!(ticksPerSecond > 0)) throw new Error('Invalid CPU clock frequency.');
+    }
+
+    const stat = await readFile(`/proc/${pid}/stat`, 'utf8');
+    // Fields after the process name start at field 3. utime and stime are fields 14 and 15.
+    const fields = stat.slice(stat.lastIndexOf(')') + 2).split(' ');
+    const seconds = (Number(fields[11]) + Number(fields[12])) / ticksPerSecond;
+    return seconds;
+  }
+
+  const { stdout } = await run('ps', ['-o', 'time=', '-p', String(pid)]);
+  const time = /^(?:(\d+)-)?(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)$/.exec(stdout.trim());
+  if (!time) throw new Error(`Could not read CPU time for PID ${pid}.`);
+
+  const seconds = Number(time[1] ?? 0) * 86400 + Number(time[2] ?? 0) * 3600 + Number(time[3]) * 60 + Number(time[4]);
+  return seconds;
+};
 
 export const readRss = async (pid: number) => {
   if (process.platform === 'linux') {
@@ -65,12 +92,7 @@ export const launchBenchmarkServer = async ({ serverName, root, port }: LaunchBe
   const options = [root, '--host', host, '--port', String(port), '--quiet'];
 
   if (serverName === 'fotone') {
-    const result = startProcess({ executable: process.execPath, args: [nodeCli, ...options] });
-    return result;
-  }
-
-  if (serverName === 'fotone-rust') {
-    const result = startProcess({ executable: rustCli, args: options });
+    const result = startProcess({ executable: fotoneCli, args: options });
     return result;
   }
 
